@@ -1,7 +1,9 @@
 {
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.5",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.0.5"
   },
   "name": "fastcampus-to-do-list-challenge",
   "version": "1.0.0",

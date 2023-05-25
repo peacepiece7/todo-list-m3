@@ -1,3 +1,9 @@
+html {
+  /* font-family: 'Nanum Gothic' */
+  font-family: 'Playfair', 'serif';
+  letter-spacing: 0.15rem;
+  word-spacing: 0.2rem;
+}
 .gradient-cover {
   position: relative;
   width: 100%;
@@ -13,16 +19,16 @@
   -webkit-background-clip: text;
   color: transparent;
 }
-.dark .gradient-cover p {
+/* .dark .gradient-cover p {
   background-image: linear-gradient(140deg, #fff 20%, #9c9c9c);
-}
+} */
 
 /* .dark .gradient-cover p {
   background-image: linear-gradient(140deg, #fff 20%, #9c9c9c);
 } */
 /* 아래 두 개는 layer components로 이동 */
 .gradient-cover:first-child p::before {
-  content: 'React To Do List';
+  content: 'FastCampus To Do List';
 }
 .gradient-cover:nth-child(2) p::before {
   content: attr(data-before);
@@ -36,4 +42,8 @@
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
+}
+
+.gradient .transitionOn::before {
+  opacity: 1;
 }
