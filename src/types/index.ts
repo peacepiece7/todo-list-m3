@@ -8,6 +8,18 @@ export type Todo = {
   createdAt: string // 할 일 생성일
   updatedAt: string // 할 일 수정일
 }
+export type TodoAddParams = {
+  order?: number
+  title: string
+}
+
+export interface Todos {
+  todos: Todo[]
+  getTodoStatus?: 'idle' | 'loading' | 'failed'
+  addTodoStatus?: 'idle' | 'loading' | 'failed'
+  editTodoStatus?: 'idle' | 'loading' | 'failed'
+  deleteToDoStatus?: 'idle' | 'loading' | 'failed'
+}
 
 type RequestBody = {
   todoIds: string[] // 새롭게 정렬할 할 일 ID 목록 (필수!)

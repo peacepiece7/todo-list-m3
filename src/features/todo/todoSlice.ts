@@ -1,82 +1,63 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { RootState, AppThunk } from '../../app/store'
+import { createSlice } from '@reduxjs/toolkit'
+import { RootState } from '../../app/store'
 
-export type TodoState = {
-  id: string
-  text: string
-  title: string
-  createdAt: string
-  lastUpdatedAt: string
-  isFinish: boolean
-}
-export interface TodoStates {
-  todos: TodoState[]
-  status: 'idle' | 'loading' | 'failed'
-}
+import { Todos } from '../../types'
+import { editTodoAsync, getTodoAsync } from './todoAsync'
 
-const initState: TodoStates = { todos: [], status: 'idle' }
-
-function getNewItem() {
-  return {
-    id: Math.random().toString(36).substr(2, 9),
-    text: 'foo bar',
-    title: 'Foo',
-    createdAt: '2023-05-24',
-    lastUpdatedAt: '2023-05-24',
-    isFinish: false,
-    status: 'idle',
-  }
-}
-async function getAsyncTodoItems() {
-  return await new Promise((res) => {
-    setTimeout(() => {
-      res([
-        {
-          id: Math.random().toString(36).substr(2, 9),
-          text: 'foo bar',
-          title: 'Foo',
-          createdAt: '2023-05-24',
-          lastUpdatedAt: '2023-05-24',
-          isFinish: false,
-          status: 'idle',
-        },
-        {
-          id: Math.random().toString(36).substr(2, 9),
-          text: 'foo bar',
-          title: 'Foo',
-          createdAt: '2023-05-24',
-          lastUpdatedAt: '2023-05-24',
-          isFinish: false,
-          status: 'idle',
-        },
-      ])
-    }, 2000)
-  })
-}
-
-export const getTodoAsync = createAsyncThunk('todo/get', async () => {
-  const responseData = await getAsyncTodoItems()
-  return responseData
-})
-export const deleteTodoAsyncById = createAsyncThunk('todo/delete', async (id: string) => {
-  const responseData = await getAsyncTodoItems()
-  // 대략 이런 느낌으로 api ㄱㄱ
-  return responseData
-})
+const initState: Todos = { todos: [] }
 
 export const todoSlice = createSlice({
   name: 'todo',
   initialState: initState,
-  reducers: {
-    addItem: (state) => {
-      // todo api 호출 로직
-      const newItem = getNewItem()
-      state.todos.push(newItem)
-      return state
-    },
+  /**
+   * @description 동기 작업만 수행하는 Reducer입니다.
+   * @example
+   * addItem: (state) => {
+   *  const newItem = getNewItem()
+   *  state.todos.push(newItem)
+   *  return state
+   * }
+   * ...out of the todoSlice boundary
+   * export const { addItem } = todoSlice.actions
+   */
+  reducers: {},
+
+  /**
+   * @description 비동기 작업을 수행하는 Reducer입니다.
+   */
+  extraReducers: (builder) => {
+    builder
+      // * getTodoAsync
+      .addCase(getTodoAsync.pending, (state) => {
+        state.getTodoStatus = 'loading'
+      })
+      .addCase(getTodoAsync.fulfilled, (state, action) => {
+        state.getTodoStatus = 'idle'
+        state.todos = action.payload
+      })
+      .addCase(getTodoAsync.rejected, (state) => {
+        state.getTodoStatus = 'failed'
+        // ? 이 부분을 어떻게 처리해주는게 좋을까?
+        state.todos = []
+      })
+
+      // * editTodoAsync
+      .addCase(editTodoAsync.pending, (state, action) => {
+        state.editTodoStatus = 'loading'
+      })
+      .addCase(editTodoAsync.fulfilled, (state, action) => {
+        state.editTodoStatus = 'idle'
+        state.todos = [
+          ...state.todos.map((todo) => (todo.id === action.payload.id ? action.payload : todo)),
+        ]
+      })
+      .addCase(editTodoAsync.rejected, (state) => {
+        state.editTodoStatus = 'failed'
+        // ? 이 부분을 어떻게 처리해주는게 좋을까?
+        state.todos = []
+      })
   },
 })
 
-export const { addItem } = todoSlice.actions
 export const selectTodo = (state: RootState) => state.todo
 export default todoSlice.reducer

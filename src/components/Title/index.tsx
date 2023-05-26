@@ -1,24 +1,14 @@
 import React, { useEffect, useMemo } from 'react'
 import changeTextColor from '../../utils/gradient'
-import { useAppSelector, useAppDispatch } from '../../app/hooks'
-import { addItem, selectTodo } from '../../features/todo/todoSlice'
+
+import dayjs from 'dayjs'
 
 import styles from './index.module.css'
-
-function getDay() {
-  const date = new Date()
-  const day = `${date.toLocaleDateString().split('.').join('')} ${date.toDateString().slice(0, 3)}`
-  return day
-}
+import { DATE_FORMAT } from '../../constants'
 
 export default function Title() {
-  const { todos, status } = useAppSelector(selectTodo)
-  const dispath = useAppDispatch()
-
-  console.log('todos : ', todos)
-
-  // 현제 날짜를 가져옵니다.
-  const today = useMemo(() => getDay(), [])
+  // https://day.js.org/docs/en/display/format
+  const today = useMemo(() => dayjs().format(DATE_FORMAT), [])
 
   useEffect(() => {
     // title gradient관련 설정입니다.
@@ -39,11 +29,6 @@ export default function Title() {
       <div className='gradient-cover'>
         <p>{today}</p>
       </div>
-      {/* todo test */}
-      <button onClick={() => dispath(addItem())}>addItem</button>
-      {todos.map((todo, i) => (
-        <div key={todo.id + i}>{todo.title}</div>
-      ))}
     </h1>
   )
 }

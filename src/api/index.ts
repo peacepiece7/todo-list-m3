@@ -1,29 +1,30 @@
-/**
-async function createTodo() {
-  const res = await fetch('https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos', {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'apikey': 'KDT5_nREmPe9B', // KDT 5기 APIKEY 입니다!
-      'username': 'KDT5_ParkYoungWoong'
-    },
-    body: JSON.stringify({
-      title: '아침 먹기!'
-    })
+import axios from 'axios'
+import { Todo, TodoAddParams } from '../types'
+axios.defaults.baseURL = 'https://asia-northeast3-heropy-api.cloudfunctions.net'
+axios.defaults.headers.post['Content-Type'] = 'application/json'
+axios.defaults.headers.put['Content-Type'] = 'application/json'
+axios.defaults.headers.username = 'KDT5_JeongTaeUk'
+axios.defaults.headers.apikey = 'KDT5_nREmPe9B'
+
+export async function getTodosAPI() {
+  const { data } = await axios('/api/todos', {
+    method: 'GET',
   })
-  const json = await res.json()
-  console.log(json)
-  return json
+  return data
 }
- */
-// Method : post (Create)
-// curl https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos
 
-// Method : get (Read)
-// curl https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos
+export async function addTodoAPI(todo: TodoAddParams) {
+  const { data } = await axios('api/todos', {
+    method: 'POST',
+    data: JSON.stringify(todo),
+  })
+  return data
+}
 
-// Method : put (Update)
-// curl https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos/:todoId
-
-// Method : delete  (Delete)
-// curl https://asia-northeast3-heropy-api.cloudfunctions.net/api/todos/:todoId
+export async function editTodoAPI(todo: Todo) {
+  const { data } = await axios(`/api/todos/${todo.id}`, {
+    method: 'PUT',
+    data: JSON.stringify(todo),
+  })
+  return data
+}
