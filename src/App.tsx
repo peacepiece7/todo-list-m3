@@ -1,8 +1,8 @@
-import React from 'react'
-import Title from '@/components/Title'
-import Layout from '@/Layout'
-import TodoList from '@/components/TodoList'
-import TodoForm from './components/TodoForm'
+import React, { lazy, Suspense } from 'react'
+const Title = lazy(() => import('@/components/Title'))
+const Layout = lazy(() => import('@/Layout'))
+const TodoList = lazy(() => import('@/components/TodoList'))
+const TodoForm = lazy(() => import('@/components/TodoForm'))
 
 function App() {
   return (

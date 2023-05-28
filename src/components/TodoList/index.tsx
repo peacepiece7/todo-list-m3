@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, lazy } from 'react'
 import { ReactSortable } from 'react-sortablejs'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import { selectTodo } from '@/features/todo/todoSlice'

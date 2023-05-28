@@ -1,20 +1,15 @@
 const path = require('path')
-const webpack = require('webpack')
-const HTMLWebpackPlugin = require('html-webpack-plugin')
 
-const isDevelopment = process.env.NODE_ENV !== 'production'
+const HTMLWebpackPlugin = require('html-webpack-plugin')
 
 // webpack config using react and typescript and postscss with hot reloading
 module.exports = {
-  mode: isDevelopment ? 'development' : 'production',
+  mode: process.env.NODE_ENV,
+  devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'cheap-module-source-map',
   entry: './src/',
   output: {
     path: path.resolve(__dirname, 'dist'),
-  },
-  devtool: isDevelopment ? 'inline-source-map' : false,
-  devServer: {
-    port: 3000,
-    historyApiFallback: true,
+    clean: true,
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
@@ -24,6 +19,11 @@ module.exports = {
   },
   module: {
     rules: [
+      {
+        test: /\.css$/,
+        include: path.resolve(__dirname, 'src'),
+        use: ['style-loader', 'css-loader', 'postcss-loader'],
+      },
       {
         test: /\.(ts|tsx|js|jsx)$/,
         use: 'babel-loader',
@@ -36,40 +36,19 @@ module.exports = {
       //   loader: 'ts-loader',
       //   exclude: /node_modules/,
       // },
+
       // scss
-      {
-        test: /\.(sa|sc|c)ss$/,
-        use: [
-          {
-            loader: 'style-loader',
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1,
-            },
-          },
-          {
-            loader: 'postcss-loader',
-          },
-        ],
-        exclude: /node_modules/,
-      },
       // images
-      {
-        test: /\.(png|svg|jpg|gif)$/,
-        use: ['file-loader'],
-        exclude: /node_modules/,
-      },
+      // {
+      //   test: /\.(png|svg|jpg|gif)$/,
+      //   use: ['file-loader'],
+      // },
     ],
   },
   plugins: [
     new HTMLWebpackPlugin({
       template: './src/index.html',
     }),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
-    }),
+    // new webpack.HotModuleReplacementPlugin(),
   ],
 }

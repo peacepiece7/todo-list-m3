@@ -22,9 +22,10 @@ type Props = {
 export default function TodoItem({ todo }: Props) {
   const [isLoading, setIsLoading] = useState(false)
   const [isEditable, setIsEditable] = useState(false)
-  const [isOptimisticDone, setIsOptimisticDone] = useState(todo.done)
+  // * 낙관적으로 처리하기 위해 todo.done 상태를 useState로 관리합니다.
+  const [isDoen, setIsDoen] = useState(todo.done)
   const [todoTitle, setTodoTitle] = useState(todo.title)
-  const dispath = useAppDispatch()
+  const dispatch = useAppDispatch()
   const { todos, deleteTodoStatus } = useAppSelector(selectTodo)
 
   type Status = {
@@ -33,35 +34,36 @@ export default function TodoItem({ todo }: Props) {
     title?: string
   }
 
-  function changeTodoStatus(status: Status) {
+  // * todo item을 수정하는 함수
+  function dispatchEditTodoAsync(status: Status) {
     todos.map((todo) => {
       if (todo.id === status.todoID) {
         !status.title && (status.title = todoTitle)
-        status.isDone === undefined && (status.isDone = isOptimisticDone)
-        dispath(editTodoAsync({ ...todo, done: status.isDone, title: status.title }))
+        status.isDone === undefined && (status.isDone = isDoen)
+        dispatch(editTodoAsync({ ...todo, done: status.isDone, title: status.title }))
       }
     })
   }
 
   // * todo item 체크 박스 클릭 이벤트 처리
   function handleOnClickCheckBtn(e: React.MouseEvent<HTMLButtonElement>) {
-    setIsOptimisticDone(!isOptimisticDone)
-    changeTodoStatus({
+    setIsDoen(!isDoen)
+    dispatchEditTodoAsync({
       todoID: todo.id,
-      isDone: !isOptimisticDone,
+      isDone: !isDoen,
     })
   }
 
   // * todo item 삭제 버튼 클릭 이벤트 처리
   function deleteTodoItem() {
     setIsLoading(true)
-    dispath(deleteTodoAsync({ todos, deleteID: todo.id }))
+    dispatch(deleteTodoAsync({ todos, deleteID: todo.id }))
   }
 
   // * todo item 수정 버튼 클릭 이벤트 처리
   function editTodoTitle() {
     if (isEditable) {
-      changeTodoStatus({
+      dispatchEditTodoAsync({
         todoID: todo.id,
         title: todoTitle,
       })
@@ -102,15 +104,17 @@ export default function TodoItem({ todo }: Props) {
             type='text'
             value={todoTitle}
             disabled={!isEditable}
-            // prettier-ignore
-            className={[isEditable ?  styles.editableTitle : styles.diseditableTitle, styles.title].join(' ')}
+            className={[
+              isEditable ? styles.editableTitle : styles.diseditableTitle,
+              styles.title,
+            ].join(' ')}
             onChange={setTitle}
           />
         </p>
       </div>
       <div>
         <div>Created at : {dayjs(todo.createdAt).format(DATE_FORMAT)}</div>
-        <div>Updated at: {dayjs(todo.updatedAt).format(DATE_FORMAT)}</div>
+        <div>Updated at : {dayjs(todo.updatedAt).format(DATE_FORMAT)}</div>
       </div>
       <div className={styles.buttonWrapper}>
         <button
@@ -118,7 +122,7 @@ export default function TodoItem({ todo }: Props) {
           type='button'
           onClick={handleOnClickCheckBtn}
         >
-          {isOptimisticDone ? <IoCheckmarkCircleSharp /> : <IoEllipseOutline />}
+          {isDoen ? <IoCheckmarkCircleSharp /> : <IoEllipseOutline />}
         </button>
         <button
           className={styles.button}
