@@ -1,3 +1,6 @@
-.todoList {
-  background-color: red;
+.container {
+  margin-top: 5rem;
+  .header {
+    margin-bottom: 1rem;
+  }
 }

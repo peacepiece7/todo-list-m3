@@ -9,7 +9,7 @@ export default function Spinner({ additionalCoverStyle, additionalSpinnerStyle }
   // ! .spinner 라고 작송하니까 postcss에서 클레스를 찾지 못하는데 문제가 뭘까...?
   return (
     <aside
-      className={styles.sp}
+      className={styles.spinnerCover}
       style={additionalCoverStyle}
     >
       <div style={additionalSpinnerStyle}></div>

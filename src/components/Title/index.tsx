@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo } from 'react'
-import changeTextColor from '../../utils/gradient'
+import changeTextColor from '@/utils/gradient'
 
 import dayjs from 'dayjs'
 
 import styles from './index.module.css'
-import { DATE_FORMAT } from '../../constants'
+import { DATE_FORMAT } from '@/constants'
 
 export default function Title() {
   // https://day.js.org/docs/en/display/format

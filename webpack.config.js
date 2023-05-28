@@ -1,5 +1,3 @@
-// todo : https://ryuhojin.tistory.com/19 typescript적용하기!
-
 const path = require('path')
 const webpack = require('webpack')
 const HTMLWebpackPlugin = require('html-webpack-plugin')
@@ -12,7 +10,6 @@ module.exports = {
   entry: './src/',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    // filename: '[name].bundle.js',s
   },
   devtool: isDevelopment ? 'inline-source-map' : false,
   devServer: {
@@ -21,6 +18,9 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
   },
   module: {
     rules: [
@@ -30,7 +30,7 @@ module.exports = {
         exclude: '/node_modules/',
       },
       // typescript
-      //  babel 7버전 이후에는 필요 없습니다. babel-loader로 가즈아. 성능도 더 좋습니다
+      //  babel 7버전 이후에는 필요 없습니다.
       // {
       //   test: /\.tsx?$/,
       //   loader: 'ts-loader',

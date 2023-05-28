@@ -1,8 +1,23 @@
 html {
-  /* font-family: 'Nanum Gothic' */
   font-family: 'Playfair', 'Nanum Myeongjo', 'Nanum Gothic' 'serif';
   letter-spacing: 0.15rem;
   word-spacing: 0.2rem;
+}
+body {
+  margin: 0;
+}
+
+h1,
+h2 {
+  margin: 0;
+}
+ul,
+li {
+  margin: 0;
+  padding: 0;
+}
+button {
+  padding: 0;
 }
 
 .gradient-cover {

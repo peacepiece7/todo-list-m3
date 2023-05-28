@@ -1,11 +1,14 @@
 {
   "dependencies": {
+    "@react-icons/all-files": "^4.1.0",
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.4.0",
     "dayjs": "^1.11.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-redux": "^8.0.5"
+    "react-redux": "^8.0.5",
+    "react-sortablejs": "^6.1.4",
+    "sortablejs": "^1.15.0"
   },
   "name": "fastcampus-to-do-list-challenge",
   "version": "1.0.0",
@@ -19,6 +22,7 @@
     "@fullhuman/postcss-purgecss": "^5.0.0",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
+    "@types/sortablejs": "^1.15.1",
     "autoprefixer": "^10.4.14",
     "babel-loader": "^9.1.2",
     "core-js": "^3.30.2",
